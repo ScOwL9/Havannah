@@ -6,8 +6,12 @@ public class ProjetInfo {
 
     int[][] plat = new int[5][5];
 
+    //saisir les places vides
+
     for(int i = 0; i < plat.length; i++) {
-      for(int j = 0) {}
+      for(int j = 0; j < plat.length; j++) {
+        
+      }
     }
     
   }
