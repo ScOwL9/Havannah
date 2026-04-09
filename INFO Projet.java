@@ -13,6 +13,11 @@ public class ProjetInfo {
         
       }
     }
+  }
+
+  public static void BibliotequeStructures() {
+
+    // listes avec les structures possibles
     
   }
   
@@ -23,10 +28,10 @@ public class ProjetInfo {
 ///   ******
 ///    ****
 ///     **
-/// 
-///         * 
-///  **    **     
-///   *      
+///  
+///               *     *
+///   **    **    **     **
+///    *    *      
 /// 
 /// *            *
 ///  *           *
