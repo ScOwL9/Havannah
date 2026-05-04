@@ -4,7 +4,7 @@ public class ProjetInfo {
 
     // Une liste 5x5
 
-    int[][] plat = new int[5][5];
+    int[][] plat = new int[9][5];
 
     //saisir les places vides
 
@@ -41,11 +41,11 @@ public class ProjetInfo {
   
 }
 
-///     **
-///    ****
-///   ******
-///    ****
-///     **
+///     * * *
+///    * * * *
+///   * * * * *
+///    * * * *
+///     * * *
 ///  
 ///               *     *
 ///   **    **    **   **
