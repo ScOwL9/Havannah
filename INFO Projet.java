@@ -2,17 +2,16 @@ public class ProjetInfo {
 
   public static void Plateu() {
 
-    // Une liste 5x5
-
-    int[][] plat = new int[9][5];
-
-    //saisir les places vides
-
-    for(int i = 0; i < plat.length; i++) {
-      for(int j = 0; j < plat.length; j++) {
-        
-      }
-    }
+    //utilisateur saisir width, par example 9
+    Scanner scan = new Scanner(System.in);
+    String s = scan.next();
+    int width = scan.nextInt()
+    
+    
+    // Une liste pour hexagone
+    char[][] hex = new char[9][5];
+    
+    
   }
 
   public static void BibliotequeStructures() {
