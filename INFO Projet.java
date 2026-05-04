@@ -2,16 +2,26 @@ public class ProjetInfo {
 
   public static void Plateu() {
 
-    //utilisateur saisir width, par example 9
-    Scanner scan = new Scanner(System.in);
-    String s = scan.next();
-    int width = scan.nextInt()
-    
-    
     // Une liste pour hexagone
-    char[][] hex = new char[9][5];
-    
-    
+    char[][] hex = new char[5][9];
+
+    for (int i = 0 ; i < 5; r++) {
+      for (int j = 0; j < 9; j++) {
+
+        hex[i][j] = ' ';
+        
+      }
+    }
+
+    for (int r = 0; r < 5; r++) {
+      int espace = Math.abs(2 - r)
+      int place = 5 - espace;
+      int debut = esapce;
+
+      for (int k = 0; k < place; k++) {
+        hex[r][debut + k * 2] = '0';
+      }
+    }
   }
 
   public static void BibliotequeStructures() {
@@ -28,13 +38,9 @@ public class ProjetInfo {
 
   public static void joueurtour (){
 
-    int tour = 1 // ou 2
-    
   }
   public static void resultats (){
-
-    if (tour = 1) {
-      
+ 
     }
   }
   
