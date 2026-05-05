@@ -5,7 +5,7 @@ public class ProjetInfo {
     // Une liste pour hexagone
     char[][] hex = new char[5][9];
 
-    for (int i = 0 ; i < 5; r++) {
+    for (int i = 0 ; i < 5; i++) {
       for (int j = 0; j < 9; j++) {
 
         hex[i][j] = ' ';
@@ -14,7 +14,7 @@ public class ProjetInfo {
     }
 
     for (int r = 0; r < 5; r++) {
-      int espace = Math.abs(2 - r)
+      int espace = Math.abs(2 - r);
       int place = 5 - espace;
       int debut = esapce;
 
@@ -66,15 +66,16 @@ public class ProjetInfo {
 ///    * * * *
 ///     * * *
 ///  
-///               *     *
-///   **    **    **   **
-///    *    *      
-/// 
-/// *            *
-///  *           *
-///   *          *
-///    *         *
-///              *
+///             * 
+///   * *      * * 
+///    *          
+
+/// *           
+///  *           
+///   *          
+///    *     
 ///     *
-///   *****
-///     *
+
+///     * *
+///    * * * 
+///     * *
