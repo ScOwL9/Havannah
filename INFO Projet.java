@@ -1,5 +1,17 @@
 public class ProjetInfo {
 
+  public class Structure {
+
+    String nom;
+    int[][] forme;
+
+    Structure(String nom, int[][] forme) {
+      this.nom = nom;
+      this.forme = forme;
+    }
+    
+  }
+
   public static void Plateu() {
 
     // Une liste pour hexagone
@@ -16,7 +28,7 @@ public class ProjetInfo {
     for (int r = 0; r < 5; r++) {
       int espace = Math.abs(2 - r);
       int place = 5 - espace;
-      int debut = esapce;
+      int debut = espace;
 
       for (int k = 0; k < place; k++) {
         hex[r][debut + k * 2] = '0';
@@ -27,6 +39,15 @@ public class ProjetInfo {
   public static void BibliotequeStructures() {
 
     // listes avec les structures possibles
+
+    Structure triangle = new Structure(
+      "Triangle",
+      new int[][]{
+        {0,0},
+        {0,2},
+        {1,1}
+      }
+    );
     
   }
 
