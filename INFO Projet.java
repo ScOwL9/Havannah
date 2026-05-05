@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class ProjetInfo {
 
   public class Structure {
@@ -36,9 +38,11 @@ public class ProjetInfo {
     }
   }
 
-  public static void BibliotequeStructures() {
+  public static ArrayList<Structure> BibliotequeStructures() {
 
     // listes avec les structures possibles
+
+    ArrayList<Structure> bibliotheque = new ArrayList<>()
 
     Structure triangle = new Structure(
       "Triangle",
@@ -48,7 +52,34 @@ public class ProjetInfo {
         {1,1}
       }
     );
+
+    bibliotheque.add(triangle);
+
+    Structure triangle_inverse = new Structure(
+      "Triangle Inverse",
+      new int[][]{
+        {0,1},
+        {1,0},
+        {1,2}
+      }
+    );
+    bibliotheque.add(triangle_inverse);
+
+    Structure etoile = new Structure(
+      "Etoile",
+      new int[][]{
+        {0,1},
+        {0,3},
+        {1,0},
+        {1,2},
+        {1,4},
+        {2,1},
+        {2,3}
+      }
+    );
+    bibliotheque.add(etoile);
     
+    return bibliotheque;
   }
 
   // on peut presented les deux joueurs comme ca:
