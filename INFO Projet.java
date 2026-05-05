@@ -36,6 +36,13 @@ public class ProjetInfo {
         hex[r][debut + k * 2] = '0';
       }
     }
+
+    ///     0 0 0
+    ///    0 0 0 0
+    ///   0 0 0 0 0
+    ///    0 0 0 0
+    ///     0 0 0
+    
   }
 
   public static ArrayList<Structure> BibliotequeStructures() {
@@ -52,8 +59,10 @@ public class ProjetInfo {
         {1,1}
       }
     );
-
     bibliotheque.add(triangle);
+    
+    ///   * *
+    ///    *
 
     Structure triangle_inverse = new Structure(
       "Triangle Inverse",
@@ -64,6 +73,9 @@ public class ProjetInfo {
       }
     );
     bibliotheque.add(triangle_inverse);
+
+    ///   *
+    ///  * *
 
     Structure etoile = new Structure(
       "Etoile",
@@ -78,6 +90,10 @@ public class ProjetInfo {
       }
     );
     bibliotheque.add(etoile);
+
+    ///     * *
+    ///    * * * 
+    ///     * *
     
     return bibliotheque;
   }
@@ -110,24 +126,10 @@ public class ProjetInfo {
       System.out.println();
     }
   }
-}
-
-///     * * *
-///    * * * *
-///   * * * * *
-///    * * * *
-///     * * *
-///  
-///             * 
-///   * *      * * 
-///    *          
+}        
 
 /// *           
 ///  *           
 ///   *          
 ///    *     
 ///     *
-
-///     * *
-///    * * * 
-///     * *
