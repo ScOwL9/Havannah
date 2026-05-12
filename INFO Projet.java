@@ -14,7 +14,7 @@ public class ProjetInfo {
     
   }
 
-  public static void Plateu() {
+  public static char[][] Plateu() {
 
     // Une liste pour hexagone
     char[][] hex = new char[5][9];
@@ -42,14 +42,15 @@ public class ProjetInfo {
     ///   0 0 0 0 0
     ///    0 0 0 0
     ///     0 0 0
-    
+
+    return hex;
   }
 
   public static ArrayList<Structure> BibliotequeStructures() {
 
     // listes avec les structures possibles
 
-    ArrayList<Structure> bibliotheque = new ArrayList<>()
+    ArrayList<Structure> bibliotheque = new ArrayList<>();
 
     Structure triangle = new Structure(
       "Triangle",
@@ -109,10 +110,11 @@ public class ProjetInfo {
   }
   public static void resultats (){
  
-    }
   }
 
-  public static void main(Stringp[] args) {
+  public static void main(String[] args) {
+
+    char[][] hex = Plateu();
     
    for (int i = 0; i < 9; i++) {
      System.out.print(i);
@@ -126,7 +128,9 @@ public class ProjetInfo {
       System.out.println();
     }
   }
-}        
+}
+
+  
 
 /// *           
 ///  *           
