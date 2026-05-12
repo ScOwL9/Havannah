@@ -154,11 +154,33 @@ public class ProjetInfo {
     return bibliotheque;
   }
 
-  // on peut presented les deux joueurs comme ca:
-  // il y a deux fonctions (par exemple) - JOUEURTOUR (fonction recursive), RESULTATS
-  // si c'est au tour de joueur 1, int tour = 1
-  // puis tour = 2 si c'est joueur 2
-  // en fin de tour, joueurtour appele RESULTATS qui calcule quel joueur faire les mouvements et forme les figures
+  public static void detecterStructures (char[][] hex, char joueur, char marque) {
+
+    ArrayList<Structure> bibliotheque = BibliothequeStructures();
+
+    for (Structure s : bibliotheque) {
+      for (int r = 0; r<9; r++) {
+        for (int c = 0; c<13; c++) {
+          boolean valide = true;
+          for (int[] coord : s.forme) {
+            int nr = r + coord[0];
+            int nc = c + coord[1];
+            if (nr < 0 || nr >= 9 || nc < 0 || nc >=13 || hex[nr][nc] != joueur) {
+              valide = false;
+              break;
+            }
+          }
+
+          if (valide) {
+            for (int[] coord : s.forme) {
+              hex[r + coord[0]][c + coord[1]] = marque;
+            }
+          }
+        }
+      }
+    }
+    
+  }
 
   public static void joueurtour (char[][] hex, int tour, Scanner scanner){
 
@@ -181,6 +203,11 @@ public class ProjetInfo {
 
     hex[r][c] = (tour == 1) ? '1' : '2';
 
+    char joueur = (tour == 1) ? '1' : '2';
+    char marque = (tour == 1) ? 'A' : 'B';
+
+    detecterStructures (hex, joueur, marque);
+
     joueurtour(hex, (tour == 1) ? 2 : 1, scanner);
   }
 
@@ -194,7 +221,7 @@ public class ProjetInfo {
    for (int i = 0; i < 13; i++) {
      System.out.print(i);
    }
-     System.out.println();
+   System.out.println();
    
     for (int r = 0; r < 7; r++) {
       for (int c = 0; c < 13; c++) {
