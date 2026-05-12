@@ -99,16 +99,35 @@ public class ProjetInfo {
   // puis tour = 2 si c'est joueur 2
   // en fin de tour, joueurtour appele RESULTATS qui calcule quel joueur faire les mouvements et forme les figures
 
-  public static void joueurtour (){
+  public static void joueurtour (char[][] hex, int tour, Scanner scanner){
 
-  }
-  public static void resultats (){
- 
+    for (int r = 0; r<9; r++) {
+      for (int c = 0; c<13; c++) {
+        System.out.print(hex[r][c]);
+      }
+      System.out.println();
+    }
+
+    System.out.print("Joueur " + tour + ", entrez les coordonnees (ligne et colonne): ");
+    int r = scanner.nextInt();
+    int c = scanner.nextInt()
+
+    if (r < 0 || r >= 9 || c < 0 || c >= 13 || hex[r][c] != "0") {
+      System.out.println("Place invalide, reessayez.");
+      joueurtour(hex, tour, scanner);
+      return;
+    }
+
+    hex[r][c] = (tour == 1) ? "1" : "2";
+
+    joueurtour(hex, (tour == 1) ? 1 : 2, scanner);
   }
 
   public static void main(String[] args) {
 
     char[][] hex = Plateu();
+    Scanner scanner = new Scanner(System.in);
+    joueurtour(hex, 1, scanner);
     
    for (int i = 0; i < 13; i++) {
      System.out.print(i);
