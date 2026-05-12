@@ -50,11 +50,11 @@ public class ProjetInfo {
     int gemmescaches = 0;
     Random random = new Random();
 
-    while (gemmesactifs < 10) {
+    while (gemmescaches < 10) {
       int r = random.nextInt(9);
       int c = random.nextInt(9);
-      if (hex[r][c] == "0" && gem[r][c] == " ") {
-        gem[r][c] = (random.nextInt(4) == 0) "R" : "S";
+      if (hex[r][c] == "0" && gemhex[r][c] == " ") {
+        gemhex[r][c] = (random.nextInt(4) == 0) "R" : "S";
         gemmescaches++; 
       }
     }
