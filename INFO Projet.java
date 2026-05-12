@@ -40,6 +40,28 @@ public class ProjetInfo {
     return hex;
 }
 
+  public static char[][] Gemmes(char[][] hex) {
+
+    char[][] gemhex = new char[11][13];
+    for (int i = 0; i < 11; i++)
+        for (int j = 0; j < 13; j++)
+            gemhex[i][j] = ' ';
+
+    int gemmescaches = 0;
+    Random random = new Random();
+
+    while (gemmesactifs < 10) {
+      int r = random.nextInt(9);
+      int c = random.nextInt(9);
+      if (hex[r][c] == "0" && gem[r][c] == " ") {
+        gem[r][c] = (random.nextInt(2) == 0) "S" : "R";
+        gemmescaches++; 
+      }
+    }
+    
+    return gemhex;
+  }
+
   public static ArrayList<Structure> BibliotequeStructures() {
 
     // listes avec les structures possibles
@@ -126,6 +148,7 @@ public class ProjetInfo {
   public static void main(String[] args) {
 
     char[][] hex = Plateu();
+    char[][] gemhex = Gemmes(hex);
     Scanner scanner = new Scanner(System.in);
     joueurtour(hex, 1, scanner);
     
