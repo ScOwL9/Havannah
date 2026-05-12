@@ -15,36 +15,30 @@ public class ProjetInfo {
   }
 
   public static char[][] Plateu() {
+    char[][] hex = new char[11][13];
+    for (int i = 0; i < 11; i++)
+        for (int j = 0; j < 13; j++)
+            hex[i][j] = ' ';
 
-    // Une liste pour hexagone
-    char[][] hex = new char[7][13];
-
-    for (int i = 0 ; i < 7; i++) {
-      for (int j = 0; j < 13; j++) {
-
-        hex[i][j] = ' ';
-        
-      }
+    for (int r = 0; r < 9; r++) {
+        int espace = Math.abs(4 - r);
+        int place  = 7 - espace;
+        for (int k = 0; k < place; k++)
+            hex[r][espace + k * 2] = '0';
     }
 
-    for (int r = 0; r < 7; r++) {
-      int espace = Math.abs(2 - r);
-      int place = 7 - espace;
-      int debut = espace;
-
-      for (int k = 0; k < place; k++) {
-        hex[r][debut + k * 2] = '0';
-      }
-    }
-
-    ///     0 0 0
-    ///    0 0 0 0
-    ///   0 0 0 0 0
-    ///    0 0 0 0
-    ///     0 0 0
-
+  ///       0 0 0    
+  ///      0 0 0 0   
+ ///      0 0 0 0 0  
+ ///     0 0 0 0 0 0 
+///     0 0 0 0 0 0 0
+///      0 0 0 0 0 0 
+///       0 0 0 0 0  
+ ///       0 0 0 0   
+  ///       0 0 0 
+    
     return hex;
-  }
+}
 
   public static ArrayList<Structure> BibliotequeStructures() {
 
