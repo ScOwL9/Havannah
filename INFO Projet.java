@@ -17,10 +17,10 @@ public class ProjetInfo {
   public static char[][] Plateu() {
 
     // Une liste pour hexagone
-    char[][] hex = new char[7][11];
+    char[][] hex = new char[7][13];
 
     for (int i = 0 ; i < 7; i++) {
-      for (int j = 0; j < 11; j++) {
+      for (int j = 0; j < 13; j++) {
 
         hex[i][j] = ' ';
         
@@ -116,13 +116,13 @@ public class ProjetInfo {
 
     char[][] hex = Plateu();
     
-   for (int i = 0; i < 9; i++) {
+   for (int i = 0; i < 13; i++) {
      System.out.print(i);
    }
      System.out.println();
    
-    for (int r = 0; r < 5; r++) {
-      for (int c = 0; c < 9; c++) {
+    for (int r = 0; r < 7; r++) {
+      for (int c = 0; c < 13; c++) {
         System.out.print(hex[r][c]);
       }
       System.out.println();
