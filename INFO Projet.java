@@ -54,7 +54,7 @@ public class ProjetInfo {
       int r = random.nextInt(9);
       int c = random.nextInt(9);
       if (hex[r][c] == "0" && gem[r][c] == " ") {
-        gem[r][c] = (random.nextInt(2) == 0) "S" : "R";
+        gem[r][c] = (random.nextInt(4) == 0) "R" : "S";
         gemmescaches++; 
       }
     }
