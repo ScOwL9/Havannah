@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Random;
 
 public class ProjetInfo {
 
@@ -53,8 +55,8 @@ public class ProjetInfo {
     while (gemmescaches < 10) {
       int r = random.nextInt(9);
       int c = random.nextInt(9);
-      if (hex[r][c] == "0" && gemhex[r][c] == " ") {
-        gemhex[r][c] = (random.nextInt(4) == 0) "R" : "S";
+      if (hex[r][c] == '0' && gemhex[r][c] == ' ') {
+        gemhex[r][c] = (random.nextInt(4) == 0) ? 'R' : 'S';
         gemmescaches++; 
       }
     }
@@ -169,17 +171,17 @@ public class ProjetInfo {
 
     System.out.print("Joueur " + tour + ", entrez les coordonnees (ligne et colonne): ");
     int r = scanner.nextInt();
-    int c = scanner.nextInt()
+    int c = scanner.nextInt();
 
-    if (r < 0 || r >= 9 || c < 0 || c >= 13 || hex[r][c] != "0") {
+    if (r < 0 || r >= 9 || c < 0 || c >= 13 || hex[r][c] != '0') {
       System.out.println("Place invalide, reessayez.");
       joueurtour(hex, tour, scanner);
       return;
     }
 
-    hex[r][c] = (tour == 1) ? "1" : "2";
+    hex[r][c] = (tour == 1) ? '1' : '2';
 
-    joueurtour(hex, (tour == 1) ? 1 : 2, scanner);
+    joueurtour(hex, (tour == 1) ? 2 : 1, scanner);
   }
 
   public static void main(String[] args) {
