@@ -17,19 +17,19 @@ public class ProjetInfo {
   public static char[][] Plateu() {
 
     // Une liste pour hexagone
-    char[][] hex = new char[5][9];
+    char[][] hex = new char[7][11];
 
-    for (int i = 0 ; i < 5; i++) {
-      for (int j = 0; j < 9; j++) {
+    for (int i = 0 ; i < 7; i++) {
+      for (int j = 0; j < 11; j++) {
 
         hex[i][j] = ' ';
         
       }
     }
 
-    for (int r = 0; r < 5; r++) {
+    for (int r = 0; r < 7; r++) {
       int espace = Math.abs(2 - r);
-      int place = 5 - espace;
+      int place = 7 - espace;
       int debut = espace;
 
       for (int k = 0; k < place; k++) {
