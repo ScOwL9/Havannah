@@ -100,7 +100,6 @@ public class ProjetInfo {
         {0,1},
         {0,3},
         {1,0},
-        {1,2},
         {1,4},
         {2,1},
         {2,3}
@@ -111,6 +110,44 @@ public class ProjetInfo {
     ///     * *
     ///    * * * 
     ///     * *
+
+    Structure ligne_h = new Structure(
+      "Ligne H",
+      new int[][] {
+        {0,0},{0,2},{0,4},{0,6},{0,8}
+      }
+    );
+    bibliotheque.add(ligne_h);
+
+    //    * * * * *
+
+    Structure ligne_diag1 = new Structure(
+      "Ligne Diag \\",
+      new int[][] {
+        {0,0},{1,-1},{2,-2},{3,-3},{4,-4}
+      }
+    );
+    bibliotheque.add(ligne_diag1);
+
+    ///   *           
+    ///    *           
+    ///     *          
+    ///      *     
+    ///       *
+
+    Structure ligne_diag2 = new Structure(
+      "Ligne Diag /",
+      new int[][] {
+        {0,0},{1,1},{2,2},{3,3},{4,4}
+      }
+    );
+    bibliotheque.add(ligne_diag2);
+
+    ///       *           
+    ///      *           
+    ///     *          
+    ///    *     
+    ///   *
     
     return bibliotheque;
   }
@@ -165,11 +202,3 @@ public class ProjetInfo {
     }
   }
 }
-
-  
-
-/// *           
-///  *           
-///   *          
-///    *     
-///     *
