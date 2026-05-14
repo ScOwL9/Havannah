@@ -287,9 +287,9 @@ public class ProjetInfo {
 
     String resultat = DetecterStructures(hex, joueur, marque);
     VerifierVoisins(hex, marque);
-    VerifierGemmes(gemhex, resultat, random);
+    score_points[tour - 1] += VerifierGemmes(gemhex, resultat, random);
 
-    JoueurTour(hex, (tour == 1) ? 2 : 1, scanner);
+    JoueurTour(hex, gemhex, (tour == 1) ? 2 : 1, score_poitns, scanner, random);
   }
 
   public static void main(String[] args) {
