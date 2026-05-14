@@ -42,7 +42,7 @@ public class ProjetInfo {
     return hex;
 }
 
-  public static char[][] Gemmes(char[][] hex) {
+  public static char[][] Gemmes(char[][] hex, Random random) {
 
     char[][] gemhex = new char[11][13];
     for (int i = 0; i < 11; i++)
@@ -50,7 +50,6 @@ public class ProjetInfo {
             gemhex[i][j] = ' ';
 
     int gemmescaches = 0;
-    Random random = new Random();
 
     while (gemmescaches < 10) {
       int r = random.nextInt(9);
@@ -64,7 +63,7 @@ public class ProjetInfo {
     return gemhex;
   }
 
-  public static ArrayList<Structure> BibliotequeStructures() {
+  public static ArrayList<Structure> BibliothequeStructures() {
 
     // listes avec les structures possibles
 
@@ -84,7 +83,7 @@ public class ProjetInfo {
     ///    *
 
     Structure triangle_inverse = new Structure(
-      "Triangle Inverse",
+      "TriangleInverse",
       new int[][]{
         {0,1},
         {1,0},
@@ -114,7 +113,7 @@ public class ProjetInfo {
     ///     * *
 
     Structure ligne_h = new Structure(
-      "Ligne H",
+      "LigneH",
       new int[][] {
         {0,0},{0,2},{0,4},{0,6},{0,8}
       }
@@ -124,7 +123,7 @@ public class ProjetInfo {
     //    * * * * *
 
     Structure ligne_diag1 = new Structure(
-      "Ligne Diag \\",
+      "LigneDiag\\",
       new int[][] {
         {0,0},{1,-1},{2,-2},{3,-3},{4,-4}
       }
@@ -138,7 +137,7 @@ public class ProjetInfo {
     ///       *
 
     Structure ligne_diag2 = new Structure(
-      "Ligne Diag /",
+      "LigneDiag/",
       new int[][] {
         {0,0},{1,1},{2,2},{3,3},{4,4}
       }
@@ -183,7 +182,86 @@ public class ProjetInfo {
     return null;
   }
 
-  public static void JoueurTour (char[][] hex, int tour, Scanner scanner){
+  public static void VerifierVoisins (char[][] hex, char marque) {
+    for (int r = 0; r<9; r++) {
+      for (int c = 0; c<13; c++) {
+        if (hex[r][c] == marque) {
+
+          int[][] voisinsA = {
+            {r, c-2}, {r, c+2}, {r-1,c+1}, {r-1,c-1}, {r+1,c-1}, {r+1,c+1}
+          };
+
+          for (int[] v:voisins) {
+            int vr = v[0];
+            int vc = v[1];
+            if (vr > 0 && vr < 9 && vc > 0 && vc < 13 && hex[vr][vc] != ' ' && hex[vr][vc] != '0' && hex[vr][vc] != marque) {
+              hex[vr][vc] = marque;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  public static int VerifierGemmes(char[][] gemhex, String resultat, Random random) {
+    if (resultat == null) return 0;
+
+    String[] parts = resultat.split(" ");
+    String nom = parts[0];
+    int r = Integer.parseInt(parts[1]);
+    int c = Integer.parseInt(parts[2]);
+    int score_points = 0;
+
+    ArrayList<Structure> bibliotheque = BibliothequeStructures();
+    for (Structure s : bibliotheque) {
+      if (s.nom.equals(nom)) {
+        
+        for (int[] coord : s.forme) {
+          int sr = r + coord[0];
+          int sc = c + coord[1];
+          if (gemhex[sr][sc] == 'S') { 
+            score_points += 1; gemhex[sr][sc] = ' '; 
+          } else if (gemhex[sr][sc] == 'R') { 
+            score_points += 2; gemhex[sr][sc] = ' '; 
+          }
+        }
+
+        for (int[] coord : s.forme) {
+          int sr = r + coord[0];
+          int sc = c + coord[1];
+          int[][] voisins = {
+            {sr,sc-2},{sr,sc+2},{sr-1,sc+1},{sr-1,sc-1},{sr+1,sc-1},{sr+1,sc+1}
+          };
+
+          if (nom.equals("Etoile")) {
+            if (gemhex[r+1][c+2] != ' ') gemhex[r+1][c+2] = 'G';
+
+          } else if (nom.contains("Triangle")) {
+            for (int i = random.nextInt(6), attempts = 0; attempts < 6; i = (i+1) % 6, attempts++) {
+            int vr = voisins[i][0];
+            int vc = voisins[i][1];
+            if (vr >= 0 && vr < 9 && vc >= 0 && vc < 13 && gemhex[vr][vc] != ' ') {
+              gemhex[vr][vc] = 'G';
+              break;
+            }
+          }
+
+          } else if (nom.contains("Ligne")) {
+            for (int[] v : voisins) {
+              int vr = v[0];
+              int vc = v[1];
+              if (vr >= 0 && vr < 9 && vc >= 0 && vc < 13 && gemhex[vr][vc] != ' ')
+                gemhex[vr][vc] = 'G';
+              }
+            }
+          }
+        break;
+      }
+    }
+    return score_points;
+  }
+
+  public static void JoueurTour (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random){
 
     for (int r = 0; r<9; r++) {
       for (int c = 0; c<13; c++) {
@@ -198,7 +276,7 @@ public class ProjetInfo {
 
     if (r < 0 || r >= 9 || c < 0 || c >= 13 || hex[r][c] != '0') {
       System.out.println("Place invalide, reessayez.");
-      joueurtour(hex, tour, scanner);
+      JoueurTour(hex, gemhex, tour, score_points, scanner, random);
       return;
     }
 
@@ -207,43 +285,23 @@ public class ProjetInfo {
     char joueur = (tour == 1) ? '1' : '2';
     char marque = (tour == 1) ? 'A' : 'B';
 
-    detecterStructures (hex, joueur, marque);
-    VerifierVoisins (hex, marque);
+    String resultat = DetecterStructures(hex, joueur, marque);
+    VerifierVoisins(hex, marque);
+    VerifierGemmes(gemhex, resultat, random);
 
-    joueurtour(hex, (tour == 1) ? 2 : 1, scanner);
-  }
-
-  public static void VerifierVoisins (char[][] hex, char marque) {
-    for (int r = 0; r<9; r++) {
-      for (int c = 0; c<13; c++) {
-        if (hex[r][c] == marque) {
-
-          int[][] voisins = {
-            {r, c-2}, {r, c+2}, {r-1,c+1}, {r-1,c-1}, {r+1,c-1}, {r+1,c+1}
-          };
-
-          for (int[][] v:voisins) {
-            int vr = v[0];
-            int vc = v[1];
-            if (vr > 0 && vr < 9 && vc > 0 && vc < 13 && hex[vr][vc] != ' ' && hex[vr][vc] != '0' && hex[vr][vc] != marque) {
-              hex[vr][vc] = marque;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  public static VerifierGemmes() {
-    
+    JoueurTour(hex, (tour == 1) ? 2 : 1, scanner);
   }
 
   public static void main(String[] args) {
 
-    char[][] hex = Plateu();
-    char[][] gemhex = Gemmes(hex);
+    Random random = new Random();
     Scanner scanner = new Scanner(System.in);
-    joueurtour(hex, 1, scanner);
+
+    char[][] hex = Plateu();
+    char[][] gemhex = Gemmes(hex, random);
+    int[] score_points = {0, 0};
+    
+    JoueurTour(hex, gemhex, 1, score_points, scanner, random);
     
    for (int i = 0; i < 13; i++) {
      System.out.print(i);
