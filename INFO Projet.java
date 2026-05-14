@@ -187,7 +187,7 @@ public class ProjetInfo {
       for (int c = 0; c<13; c++) {
         if (hex[r][c] == marque) {
 
-          int[][] voisinsA = {
+          int[][] voisins = {
             {r, c-2}, {r, c+2}, {r-1,c+1}, {r-1,c-1}, {r+1,c-1}, {r+1,c+1}
           };
 
