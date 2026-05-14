@@ -154,7 +154,7 @@ public class ProjetInfo {
     return bibliotheque;
   }
 
-  public static void detecterStructures (char[][] hex, char joueur, char marque) {
+  public static String DetecterStructures (char[][] hex, char joueur, char marque) {
 
     ArrayList<Structure> bibliotheque = BibliothequeStructures();
 
@@ -175,14 +175,15 @@ public class ProjetInfo {
             for (int[] coord : s.forme) {
               hex[r + coord[0]][c + coord[1]] = marque;
             }
+            return s.nom + " " + r + " " + c; 
           }
         }
       }
     }
-    
+    return null;
   }
 
-  public static void joueurtour (char[][] hex, int tour, Scanner scanner){
+  public static void JoueurTour (char[][] hex, int tour, Scanner scanner){
 
     for (int r = 0; r<9; r++) {
       for (int c = 0; c<13; c++) {
@@ -207,8 +208,34 @@ public class ProjetInfo {
     char marque = (tour == 1) ? 'A' : 'B';
 
     detecterStructures (hex, joueur, marque);
+    VerifierVoisins (hex, marque);
 
     joueurtour(hex, (tour == 1) ? 2 : 1, scanner);
+  }
+
+  public static void VerifierVoisins (char[][] hex, char marque) {
+    for (int r = 0; r<9; r++) {
+      for (int c = 0; c<13; c++) {
+        if (hex[r][c] == marque) {
+
+          int[][] voisins = {
+            {r, c-2}, {r, c+2}, {r-1,c+1}, {r-1,c-1}, {r+1,c-1}, {r+1,c+1}
+          };
+
+          for (int[][] v:voisins) {
+            int vr = v[0];
+            int vc = v[1];
+            if (vr > 0 && vr < 9 && vc > 0 && vc < 13 && hex[vr][vc] != ' ' && hex[vr][vc] != '0' && hex[vr][vc] != marque) {
+              hex[vr][vc] = marque;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public static VerifierGemmes() {
+    
   }
 
   public static void main(String[] args) {
