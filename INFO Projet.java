@@ -385,6 +385,6 @@ public class ProjetInfo {
     char[][] gemhex = Gemmes(hex, random);
     int[] score_points = {0, 0};
     
-    PauseMenu (hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots);
+    PauseMenu (hex, gemhex, 1, score_points, scanner, random, save_slots);
   }
 }
