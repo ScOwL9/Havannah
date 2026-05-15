@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
-import java.io.File;
+import java.io.*;
 import java.io.IOException;
 
 public class ProjetInfo {
@@ -392,16 +392,54 @@ public class ProjetInfo {
     PauseMenu (hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots);
   }
 
+  public static void SauvegarderFichiers(char[][] hex, char[][] gemhex, int tour, int[] score_points, int choix_slot) {
+
+    try {
+      BufferedWriter bw = new BufferedWriter(new FileWriter("slot"+choix_slot+".txt"));
+      bw.write("tour:"+tour);
+      bw.newLine();
+      bw.write("scores:"+score_points[0]+","+score_points[1]);
+      bw.newLine();
+      bw.write("hex:");
+      bw.newLine();
+      for (int r = 0; r<9;r++) {
+        bw.write(new String(hex[r]));
+        bw.newLine();
+      }
+      bw.write("gemhex:");
+      bw.newLine();
+      for (int r = 0; r<9;r++) {
+        bw.write(new String(gemhex[r]));
+        bw.newLine();
+      }
+      bw.close();
+      System.out.println("Partie sauvegarde dans slot"+choix_slot+".txt");
+    } catch (IOException e) {
+      System.out.println("Erreur de sauvegarde: "+e.getMessage());
+    }
+  }
+
   public static Sauvegarder[] Sauvergarde (char[][] hex, char[][] gemhex, int tour, int[] score_points, Sauvegarder[] save_slots, Scanner scanner) {
     
     System.out.println("Quel slot voulez-vous utiliser? (0-4)");
     int choix_slot = scanner.nextInt();
       
     if (save_slots[choix_slot] != null) {
-      System.out.println("Slot invalide.");
-      Sauvergarde(hex, gemhex, tour, score_points, save_slots, scanner);
+      System.out.println("Slot occupe. Ecraser?");
+      System.out.println("0 - Oui");
+      System.out.println("1 - Non");
+      int conf = scanner.nextInt();
+      if (conf == 0) {
+        save_slots[choix_slot] = new Sauvegarder(hex, gemhex, score_points, tour);
+        SauvegarderFichiers(hex, gemhex, tour, score_points, choix_slot);
+        System.out.println("Match auvegarde.");
+      } else {
+        Sauvergarde(hex, gemhex, tour, score_points, save_slots, scanner);
+      }
     } else {
       save_slots[choix_slot] = new Sauvegarder(hex, gemhex, score_points, tour);
+      SauvegarderFichiers(hex, gemhex, tour, score_points, choix_slot);
+      System.out.println("Match auvegarde.");
       return save_slots;
     }
     return save_slots;
@@ -461,9 +499,9 @@ public class ProjetInfo {
       for (int i = 0; i < 5; i++) {
         System.out.println(i ++ " - " + (save_slots[i] != null ? "Match " + (i+1) : "Vide");
       }
-      int slot_choix = scanner.nextInt();
-      if (save_slots[slot_choix] != null) {
-        Sauvegarder s = save_slots[slot_choix];
+      int choix_slot = scanner.nextInt();
+      if (save_slots[choix_slot] != null) {
+        Sauvegarder s = save_slots[choix_slot];
         PauseMenu (s.save_hex, s.save_gemhex, s.save_tour, s.save_score_points, scanner, random, save_slots);
       } else {
         System.out.println("Slot Vide!");
