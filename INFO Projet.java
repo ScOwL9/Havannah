@@ -307,7 +307,45 @@ public class ProjetInfo {
       return score_points;
   }
 
-  public static void JoueurTour (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random, Sauvegarder[] save_slots) {
+  public static void Resultats(int[] score_points, Random random, Scanner scanner) {
+    System.out.println();
+    System.out.println("--- Fin du match ---");
+    System.out.println("Joueur 1: " + score_points[0] + " points");
+    System.out.println("Joueur 2: " + score_points[1] + " points");
+    System.out.println();
+
+    if (score_points[0] > score_points[1]) {
+      System.out.println("Joueur 1 gagne!");
+    } else if (score_points[1] > score_points[0]) {
+      System.out.println("Joueur 2 gagne!");
+    } else {
+      System.out.println("Egalite!");
+    }
+
+    System.out.println();
+    System.out.println("0 - Retour au menu principal");
+    System.out.println("1 - Quitter");
+
+    int choix = scanner.nextInt();
+    if (choix == 0) {
+      MenuPrincipal(scanner, random);
+    } else {
+      System.exit(0);
+    }
+  }
+
+  public static boolean VerifierFin (char[][]hex) {
+    for (int r = 0; r < 9; r++) {
+      for (int c = 0; c < 13; c++) {
+        if (hex[r][c] == '0') {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  public static void JoueurTour (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random, Sauvegarder[] save_slots, int passer) {
 
     for (int i = 0; i < 13; i++) {
      System.out.print(i);
@@ -338,13 +376,15 @@ public class ProjetInfo {
       System.out.println();
     }
 
+    // debug gemmes
+
     System.out.print("Joueur " + tour + ", entrez les coordonnees (ligne et colonne): ");
     int r = scanner.nextInt();
     int c = scanner.nextInt();
 
     if (r < 0 || r >= 9 || c < 0 || c >= 13 || hex[r][c] != '0' && hex[r][c] != 'G') {
       System.out.println("Place invalide, reessayez.");
-      JoueurTour(hex, gemhex, tour, score_points, scanner, random, save_slots);
+      JoueurTour(hex, gemhex, tour, score_points, scanner, random, save_slots, passer);
       return;
     }
 
@@ -358,7 +398,13 @@ public class ProjetInfo {
       score_points[tour - 1] += VerifierGemmes(hex, gemhex, tour, resultat, random);
     }
 
+    passer = 0;
+    
     VerifierVoisins(hex, gemhex, joueur, marque, score_points, tour);
+
+    if (VerifierFin(hex)) {
+      Resultats(score_points, random, scanner);
+    }
 
     for (int i = 0; i < 13; i++) {
      System.out.print(i);
@@ -389,7 +435,9 @@ public class ProjetInfo {
       System.out.println();
     }
 
-    PauseMenu (hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots);
+    // debug gemmes
+
+    PauseMenu (hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots, passer);
   }
 
   public static void SauvegarderFichiers(char[][] hex, char[][] gemhex, int tour, int[] score_points, int choix_slot) {
@@ -431,8 +479,8 @@ public class ProjetInfo {
       String[] partie = ligne.split(":");
       int tour = Integer.parseInt(partie[1]);
       
-      String ligne = br.readLine();
-      String[] partie = ligne.split(":");
+      String ligne2 = br.readLine();
+      String[] partie2 = ligne.split(":");
       String[] score = partie[1].split(",");
       int[] score_points = {Integer.parseInt(score[0]), Integer.parseInt(score[1])};
 
@@ -448,7 +496,7 @@ public class ProjetInfo {
         gemhex[r] = br.readLine().toCharArray();
       }
 
-      br.close()
+      br.close();
       return new Sauvegarder(hex, gemhex, score_points, tour);
         
     } catch (IOException e) {
@@ -483,7 +531,7 @@ public class ProjetInfo {
     return save_slots;
   }
 
-  public static void PauseMenu (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random, Sauvegarder[] save_slots) {
+  public static void PauseMenu (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random, Sauvegarder[] save_slots, int passer) {
     
     System.out.println();
     System.out.println("Joueur " + tour + ", que voulez-vous faire?");
@@ -496,17 +544,20 @@ public class ProjetInfo {
     int choix = scanner.nextInt();
 
     if (choix == 0) {
-      JoueurTour(hex, gemhex, tour, score_points, scanner, random, save_slots);
+      JoueurTour(hex, gemhex, tour, score_points, scanner, random, save_slots, passer);
     } else if (choix == 1) {
-      JoueurTour(hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots);
       passer++;
+      if (passer >=2) {
+        Resultats(score_points, random, scanner);
+      }
+      JoueurTour(hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots, passer);
     } else if (choix == 2) {
       Sauvergarde (hex, gemhex, tour, score_points, save_slots, scanner);
-      PauseMenu (hex, gemhex, tour, score_points, scanner, random, save_slots);
+      PauseMenu (hex, gemhex, tour, score_points, scanner, random, save_slots, passer);
     } else if (choix == 3) {
       System.exit(0);
     } else if (choix > 3) {
-      PauseMenu (hex, gemhex, tour, score_points, scanner, random, save_slots);
+      PauseMenu (hex, gemhex, tour, score_points, scanner, random, save_slots, passer);
     }
   }
 
@@ -520,7 +571,8 @@ public class ProjetInfo {
     System.out.println("2 - Quitter");
     System.out.println();
 
-    Sauvegarder[] save_slots = new Sauvegarder[5];    
+    Sauvegarder[] save_slots = new Sauvegarder[5];
+    int passer = 0;
     int choix = scanner.nextInt();
 
     if (choix == 0) {
@@ -528,7 +580,7 @@ public class ProjetInfo {
       char[][] gemhex = Gemmes(hex, random);
       int[] score_points = {0, 0};
       int passer = 0;
-      PauseMenu (hex, gemhex, 1, score_points, scanner, random, save_slots);
+      PauseMenu (hex, gemhex, 1, score_points, scanner, random, save_slots, passer);
       
     } else if (choix == 1) {
       System.out.println();
@@ -544,7 +596,7 @@ public class ProjetInfo {
       
       if (s != null) {
         save_slots[choix_slot] = s;
-        PauseMenu (s.save_hex, s.save_gemhex, s.save_tour, s.save_score_points, scanner, random, save_slots);
+        PauseMenu (s.save_hex, s.save_gemhex, s.save_tour, s.save_score_points, scanner, random, save_slots, passer);
       } else {
         System.out.println("Slot Vide!");
         MenuPrincipal(scanner, random);
@@ -560,6 +612,6 @@ public class ProjetInfo {
   public static void main(String[] args) {
     Random random = new Random();
     Scanner scanner = new Scanner(System.in);
-    MenuPrincipal(sacnner, random);
+    MenuPrincipal(scanner, random);
   }
 }
