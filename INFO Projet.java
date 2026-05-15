@@ -318,13 +318,13 @@ public class ProjetInfo {
 
     VerifierVoisins(hex, gemhex, marque, score_points, tour);
 
-    for (int i = 0; i < 13; i++) {
+    for (i = 0; i < 13; i++) {
      System.out.print(i);
     }
     System.out.println();
    
-    for (int r = 0; r < 9; r++) {
-      for (int c = 0; c < 13; c++) {
+    for (r = 0; r < 9; r++) {
+      for (c = 0; c < 13; c++) {
         System.out.print(hex[r][c]);
       }
       System.out.println();
