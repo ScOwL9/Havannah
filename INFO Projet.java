@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class ProjetInfo {
 
-  public class Structure {
+  public static class Structure {
 
     String nom;
     int[][] forme;
@@ -13,7 +13,21 @@ public class ProjetInfo {
       this.nom = nom;
       this.forme = forme;
     }
-    
+  }
+
+  public static class Sauvegarder {
+
+    char[][] save_hex;
+    char[][] save_gemhex;
+    int[] save_score_points;
+    int save_tour;
+
+    Sauvegarder(char[][] save_hex, char[][] save_gemhex, int[] save_score_points, int save_tour) {
+      this.save_hex = save_hex;
+      this.save_gemhex = save_gemhex;
+      this.save_score_points = save_score_points;
+      this.save_tour = save_tour;
+    }
   }
 
   public static char[][] Plateu() {
@@ -109,7 +123,7 @@ public class ProjetInfo {
     bibliotheque.add(etoile);
 
     ///     * *
-    ///    * * * 
+    ///    *   * 
     ///     * *
 
     Structure ligne_h = new Structure(
@@ -182,7 +196,7 @@ public class ProjetInfo {
     return null;
   }
 
-  public static void VerifierVoisins (char[][] hex, char marque) {
+  public static void VerifierVoisins (char[][] hex, char[][] gemhex, char marque, int[] score_points, int tour) {
     for (int r = 0; r<9; r++) {
       for (int c = 0; c<13; c++) {
         if (hex[r][c] == marque) {
@@ -196,6 +210,11 @@ public class ProjetInfo {
             int vc = v[1];
             if (vr > 0 && vr < 9 && vc > 0 && vc < 13 && hex[vr][vc] != ' ' && hex[vr][vc] != '0' && hex[vr][vc] != marque) {
               hex[vr][vc] = marque;
+              if (gemhex[vr][vc] == 'S') {
+                score_points[tour - 1] += 1;
+              } else if (gemhex[vr][vc] == 'R') {
+                score_points[tour - 1] += 2;
+              }
             }
           }
         }
@@ -203,7 +222,7 @@ public class ProjetInfo {
     }
   }
   
-  public static int VerifierGemmes(char[][] gemhex, String resultat, Random random) {
+  public static int VerifierGemmes(char[][] gemhex, int tour, String resultat, Random random) {
     if (resultat == null) return 0;
 
     String[] parts = resultat.split(" ");
@@ -220,9 +239,11 @@ public class ProjetInfo {
           int sr = r + coord[0];
           int sc = c + coord[1];
           if (gemhex[sr][sc] == 'S') { 
-            score_points += 1; gemhex[sr][sc] = ' '; 
+            score_points += 1; 
+            gemhex[sr][sc] = ' '; 
           } else if (gemhex[sr][sc] == 'R') { 
-            score_points += 2; gemhex[sr][sc] = ' '; 
+            score_points += 2; 
+            gemhex[sr][sc] = ' '; 
           }
         }
 
@@ -261,10 +282,15 @@ public class ProjetInfo {
     return score_points;
   }
 
-  public static void JoueurTour (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random){
+  public static void JoueurTour (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random, Sauvegarder[] save_slots) {
 
-    for (int r = 0; r<9; r++) {
-      for (int c = 0; c<13; c++) {
+    for (int i = 0; i < 13; i++) {
+     System.out.print(i);
+    }
+    System.out.println();
+   
+    for (int r = 0; r < 9; r++) {
+      for (int c = 0; c < 13; c++) {
         System.out.print(hex[r][c]);
       }
       System.out.println();
@@ -276,7 +302,7 @@ public class ProjetInfo {
 
     if (r < 0 || r >= 9 || c < 0 || c >= 13 || hex[r][c] != '0') {
       System.out.println("Place invalide, reessayez.");
-      JoueurTour(hex, gemhex, tour, score_points, scanner, random);
+      JoueurTour(hex, gemhex, tour, score_points, scanner, random, save_slots);
       return;
     }
 
@@ -286,10 +312,66 @@ public class ProjetInfo {
     char marque = (tour == 1) ? 'A' : 'B';
 
     String resultat = DetecterStructures(hex, joueur, marque);
-    VerifierVoisins(hex, marque);
-    score_points[tour - 1] += VerifierGemmes(gemhex, resultat, random);
+    if (resultat != null) {
+      score_points[tour - 1] += VerifierGemmes(gemhex, tour, resultat, random);
+    }
 
-    JoueurTour(hex, gemhex, (tour == 1) ? 2 : 1, score_poitns, scanner, random);
+    VerifierVoisins(hex, gemhex, marque, score_points, tour);
+
+    PauseMenu (hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots);
+  }
+
+  public static Sauvegarder[] Sauvergarde (char[][] hex, char[][] gemhex, int tour, int[] score_points, Sauvegarder[] save_slots, Scanner scanner) {
+    
+    System.out.println("Quel slot voulez-vous utiliser? (0-4)");
+    int choix_slot = scanner.nextInt();
+      
+    if (save_slots[choix_slot] != null) {
+      System.out.println("Slot invalide.");
+      Sauvergarde(hex, gemhex, tour, score_points, save_slots, scanner);
+    } else {
+      save_slots[choix_slot] = new Sauvegarder(hex, gemhex, score_points, tour);
+      return save_slots;
+    }
+    return save_slots;
+  }
+
+  public static void PauseMenu (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random, Sauvegarder[] save_slots) {
+    
+    System.out.println();
+    System.out.println("Joueur " + tour + ", que voulez-vous faire?");
+    System.out.println("0 - Jouer");
+    System.out.println("1 - Passer.");
+    System.out.println("2 - Sauvegarder ");
+    System.out.println("3 - Quitter");
+    System.out.println();
+
+    int choix = scanner.nextInt();
+
+    if (choix == 0) {
+      JoueurTour(hex, gemhex, tour, score_points, scanner, random, save_slots);
+    } else if (choix == 1) {
+      JoueurTour(hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots);
+    } else if (choix == 2) {
+      Sauvergarde (hex, gemhex, tour, score_points, save_slots, scanner);
+
+      for (int i = 0; i < 13; i++) {
+        System.out.print(i);
+      }
+        System.out.println();
+   
+      for (int r = 0; r < 9; r++) {
+        for (int c = 0; c < 13; c++) {
+          System.out.print(hex[r][c]);
+        }
+        System.out.println();
+      }
+      
+      
+      PauseMenu (hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots);
+    } else if (choix == 3) {
+      System.exit(0);
+    }
   }
 
   public static void main(String[] args) {
@@ -297,22 +379,12 @@ public class ProjetInfo {
     Random random = new Random();
     Scanner scanner = new Scanner(System.in);
 
+    Sauvegarder[] save_slots = new Sauvegarder[5];
+
     char[][] hex = Plateu();
     char[][] gemhex = Gemmes(hex, random);
     int[] score_points = {0, 0};
     
-    JoueurTour(hex, gemhex, 1, score_points, scanner, random);
-    
-   for (int i = 0; i < 13; i++) {
-     System.out.print(i);
-   }
-   System.out.println();
-   
-    for (int r = 0; r < 7; r++) {
-      for (int c = 0; c < 13; c++) {
-        System.out.print(hex[r][c]);
-      }
-      System.out.println();
-    }
+    PauseMenu (hex, gemhex, (tour == 1) ? 2 : 1, score_points, scanner, random, save_slots);
   }
 }
