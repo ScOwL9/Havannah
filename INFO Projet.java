@@ -32,6 +32,8 @@ public class ProjetInfo {
     }
   }
 
+  
+
   public static char[][] Plateu() {
     char[][] hex = new char[11][13];
     for (int i = 0; i < 11; i++) {
@@ -405,15 +407,7 @@ public class ProjetInfo {
     return save_slots;
   }
 
-  public static void PauseMenu (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random, Sauvegarder[] save_slots, int passer) {
-
-    if (passer == 2) {
-      System.out.println("Les joueurs ont passes duex fois!");
-      for (int seconds=5; seconds >= 0; seconds--) {
-        System.out.println("Retour au Menu Principal dans " + i + " seconds.");
-        Thread.sleep(1000);
-      }
-    }
+  public static void PauseMenu (char[][] hex, char[][] gemhex, int tour, int[] score_points, Scanner scanner, Random random, Sauvegarder[] save_slots) {
     
     System.out.println();
     System.out.println("Joueur " + tour + ", que voulez-vous faire?");
@@ -458,7 +452,7 @@ public class ProjetInfo {
       char[][] gemhex = Gemmes(hex, random);
       int[] score_points = {0, 0};
       int passer = 0;
-      PauseMenu (hex, gemhex, 1, score_points, scanner, random, save_slots, passer);
+      PauseMenu (hex, gemhex, 1, score_points, scanner, random, save_slots);
       
     } else if (choix == 1) {
       System.out.println();
