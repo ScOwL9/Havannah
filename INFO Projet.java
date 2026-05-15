@@ -399,6 +399,7 @@ public class ProjetInfo {
       bw.write("tour:"+tour);
       bw.newLine();
       bw.write("scores:"+score_points[0]+","+score_points[1]);
+      
       bw.newLine();
       bw.write("hex:");
       bw.newLine();
@@ -406,16 +407,53 @@ public class ProjetInfo {
         bw.write(new String(hex[r]));
         bw.newLine();
       }
+      
       bw.write("gemhex:");
       bw.newLine();
       for (int r = 0; r<9;r++) {
         bw.write(new String(gemhex[r]));
         bw.newLine();
       }
+      
       bw.close();
       System.out.println("Partie sauvegarde dans slot"+choix_slot+".txt");
     } catch (IOException e) {
       System.out.println("Erreur de sauvegarde: "+e.getMessage());
+    }
+  }
+
+   public static Sauvegarder ChargeFichiers(int choix_slot) {
+
+    try {
+      BufferedReader br = new BufferedReader(new FileReader("slot"+choix_slot+".txt"));
+
+      String ligne = br.readLine();
+      String[] partie = ligne.split(":");
+      int tour = Integer.parseInt(partie[1]);
+      
+      String ligne = br.readLine();
+      String[] partie = ligne.split(":");
+      String[] score = partie[1].split(",");
+      int[] score_points = {Integer.parseInt(score[0]), Integer.parseInt(score[1])};
+
+      br.readLine();
+      char[][] hex = new char[9][];
+      for (int r = 0; r < 9; r++) {
+        hex[r] = br.readLine().toCharArray();
+      }
+
+      br.readLine();
+      char[][] gemhex = new char[9][];
+      for (int r = 0; r < 9; r++) {
+        gemhex[r] = br.readLine().toCharArray();
+      }
+
+      br.close()
+      return new Sauvegarder(hex, gemhex, score_points, tour);
+        
+    } catch (IOException e) {
+      System.out.println("Erreur de chargement: "+e.getMessage());
+      return null;
     }
   }
 
@@ -482,7 +520,7 @@ public class ProjetInfo {
     System.out.println("2 - Quitter");
     System.out.println();
 
-    Sauvegarder[] save_slots = new Sauvegarder[5];
+    Sauvegarder[] save_slots = new Sauvegarder[5];    
     int choix = scanner.nextInt();
 
     if (choix == 0) {
@@ -497,11 +535,15 @@ public class ProjetInfo {
       System.out.println("Choisir le match (0-4):");
 
       for (int i = 0; i < 5; i++) {
-        System.out.println(i ++ " - " + (save_slots[i] != null ? "Match " + (i+1) : "Vide");
+        java.io.File f = new java.io.File("slot"+i+".txt");
+        System.out.println(i + " - " + (f.exists() ? "Match" + (i+1) : "Vide"));
       }
+      
       int choix_slot = scanner.nextInt();
-      if (save_slots[choix_slot] != null) {
-        Sauvegarder s = save_slots[choix_slot];
+      Sauvegarder s = ChargerFichiers(choix_slot);
+      
+      if (s != null) {
+        save_slots[choix_slot] = s;
         PauseMenu (s.save_hex, s.save_gemhex, s.save_tour, s.save_score_points, scanner, random, save_slots);
       } else {
         System.out.println("Slot Vide!");
